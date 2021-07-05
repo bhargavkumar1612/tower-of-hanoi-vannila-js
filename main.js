@@ -70,7 +70,9 @@ function listen(){
                 document.getElementById('moves').textContent = moves 
             }
             else{
-                document.querySelector('p.error-message').textContent="Not Allowed"
+                if (a[a.length-1].id!==currentBar.id){
+                    document.querySelector('p.error-message').textContent="Not Allowed"
+                }
                 setTimeout(()=>{document.querySelector('p.error-message').textContent=""},2000)
             }
         })
