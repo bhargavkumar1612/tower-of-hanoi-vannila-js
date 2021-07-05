@@ -10,19 +10,47 @@
 </head>
 <body>
     <h1 class="title">Tower Of Hanoi</h1>
+    <div class='status-bar'>
+        <p class="time">Time: 00:00</p>
+        <div class="flex">
+            <p class="time">Moves: </p><span class="moves" id="moves">0</span><span class="moves" id="min-moves">/31</span>
+        </div>
+        <select name="nbars" id="bars-select">
+            <option value=3>3</option>
+            <option value=4>4</option>
+            <option selected value=5>5</option>
+            <option value=6>6</option>
+            <option value=7>7</option>
+            <option value=8>8</option>
+        </select>
+        <button class='status-btn' id="reset">Reset</button>
+        <button class='status-btn' id="solve">Solve</button>
+        <p class="error-message"></p>
+    </div>
+    
     <div class="main">
-        <div class="rod" id="first-rod">
+        <div class="area" id="area1">
             <div class="vertical"></div>
             <div class="horizontal"></div>
-            <div id="bar1"></div>
+            <div class="bars" id="rod1">
+                <div class="bar" id="bar1" draggable="true"></div>
+                <div class="bar" id="bar2" draggable="true"></div>
+                <div class="bar" id="bar3" draggable="true"></div>
+                <div class="bar" id="bar4" draggable="true"></div>
+                <div class="bar" id="bar5" draggable="true"></div>
+            </div>
         </div>
-        <div class="rod" id="second-rod">
+        <div class="area" id="area2">
             <div class="vertical"></div>
             <div class="horizontal"></div>
+            <div class="bars" id="rod2">
+            </div>
         </div>
-        <div class="rod" id="third-rod">
+        <div class="area" id="area3">
             <div class="vertical"></div>
             <div class="horizontal"></div>
+            <div class="bars" id="rod3">
+            </div>
         </div>
     </div>
 </body>
