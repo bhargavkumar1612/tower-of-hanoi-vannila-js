@@ -1,4 +1,8 @@
-document.querySelector(".main").addEventListener('dragover', (event)=>{
+const preventingDefaultFunction = (event)=>{
+    event.preventDefault()
+}
+document.querySelector(".main").addEventListener('dragover', preventingDefaultFunction)
+document.querySelector(".main").addEventListener('touchmove', (event)=>{
     event.preventDefault()
 })
 let rods = document.querySelectorAll('.bars')
@@ -8,6 +12,12 @@ for (i=1;i<=3;i++){
     el.id = i
     areas.push(el)
 }
+
+document.querySelectorAll('.bars').forEach(bar=>{
+    bar.style.bottom = `document.querySelector('.horizontal').getBoundingClientRect().top`
+    console.log(bar.style.bottom)
+    console.log(document.querySelector('.horizontal').getBoundingClientRect().top)
+})
 
 let moves = 0
 let currentBar = null
@@ -52,14 +62,11 @@ document.getElementById('solve').onclick = solve
 
 function listen(){
     rods.forEach(rod=>{
-        rod.addEventListener('dragstart', (event)=>{
+        let startListen = (event)=>{
             currentBar = event.target
             initialParent = event.target.parentNode     
-        })
-        rod.addEventListener('dragover', (event)=>{        
-            event.preventDefault()
-        })
-        rod.addEventListener('dragend', (event)=>{  
+        }
+        let endListen = (event)=>{  
             finalParent = getClosestElement(event.clientX, event.clientY)
             let a = finalParent.querySelectorAll('.bar')
             let b = initialParent.querySelectorAll(".bar")
@@ -70,12 +77,19 @@ function listen(){
                 document.getElementById('moves').textContent = moves 
             }
             else{
-                if (a[a.length-1].id!==currentBar.id){
-                    document.querySelector('p.error-message').textContent="Not Allowed"
-                }
+                document.querySelector('p.error-message').textContent="Not Allowed"
                 setTimeout(()=>{document.querySelector('p.error-message').textContent=""},2000)
             }
-        })
+        }
+        rod.addEventListener('dragstart', startListen)
+        rod.addEventListener('touchstart', startListen)
+
+        rod.addEventListener('dragover', preventingDefaultFunction)
+        rod.addEventListener('touchmove',preventingDefaultFunction)
+
+        rod.addEventListener('dragend', endListen)
+        rod.addEventListener('touchend', endListen)
+
     }
 )
 }
@@ -113,7 +127,8 @@ function solve(){
         let [from, to] = sol[i]
         let fromNode = document.getElementById(from)
         let toNode = document.getElementById(to)
-        let top = fromNode.querySelectorAll('.bar')[fromNode.querySelectorAll('.bar').length-1]
+        let fromNodeBars = fromNode.querySelectorAll('.bar')
+        let top = fromNodeBars[fromNodeBars.length-1]
         fromNode.removeChild(top)
         toNode.appendChild(top)
         i+=1
