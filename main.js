@@ -15,8 +15,6 @@ for (i=1;i<=3;i++){
 
 document.querySelectorAll('.bars').forEach(bar=>{
     bar.style.bottom = `document.querySelector('.horizontal').getBoundingClientRect().top`
-    console.log(bar.style.bottom)
-    console.log(document.querySelector('.horizontal').getBoundingClientRect().top)
 })
 
 let moves = 0
@@ -64,10 +62,21 @@ function listen(){
     rods.forEach(rod=>{
         let startListen = (event)=>{
             currentBar = event.target
-            initialParent = event.target.parentNode     
+            initialParent = event.target.parentNode   
         }
-        let endListen = (event)=>{  
-            finalParent = getClosestElement(event.clientX, event.clientY)
+        
+        rod.addEventListener('dragstart', startListen)
+        rod.addEventListener('touchstart', startListen)
+
+        rod.addEventListener('dragover', preventingDefaultFunction)
+        rod.addEventListener('touchmove',preventingDefaultFunction)
+
+        let endListen = (event)=>{
+            if(event.type==='dragend'){
+                finalParent = getClosestElement(event.clientX, event.clientY)
+            }else{
+                finalParent = getClosestElement(event.changedTouches[0].clientX, event.changedTouches.clientY)
+            }
             let a = finalParent.querySelectorAll('.bar')
             let b = initialParent.querySelectorAll(".bar")
             if ((a.length===0 || a[a.length-1].id<currentBar.id) &&  b[b.length-1].id===currentBar.id){
@@ -81,12 +90,6 @@ function listen(){
                 setTimeout(()=>{document.querySelector('p.error-message').textContent=""},2000)
             }
         }
-        rod.addEventListener('dragstart', startListen)
-        rod.addEventListener('touchstart', startListen)
-
-        rod.addEventListener('dragover', preventingDefaultFunction)
-        rod.addEventListener('touchmove',preventingDefaultFunction)
-
         rod.addEventListener('dragend', endListen)
         rod.addEventListener('touchend', endListen)
 
